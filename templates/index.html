@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stock Data Project</title>
+    <style>
+        body { font-family: Arial, sans-serif; }
+        .container { width: 80%; margin: 0 auto; }
+        h1 { color: #333; text-align: center; }
+        .stock-data, .stock-news, .stock-history { margin-top: 20px; }
+        .stock-data table, .stock-history table { width: 100%; border-collapse: collapse; }
+        .stock-data th, .stock-data td, .stock-history th, .stock-history td { border: 1px solid #ddd; padding: 8px; }
+        .stock-data th, .stock-history th { background-color: #f4f4f4; }
+        .form-group { margin-bottom: 15px; text-align: center; }
+        .form-group label { margin-right: 10px; }
+        .form-group input { padding: 5px; width: 200px; }
+        .form-group button { padding: 7px 15px; }
+        error { color: red; text-align: center; }
+        .news-item { margin-bottom: 10px; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Stock Data Project</h1>
+
+        <!-- Stock Input Form -->
+        <form method="get" action="/stock">
+            <div class="form-group">
+                <label for="ticker">Enter Ticker Symbol:</label>
+                <input type="text" id="ticker" name="ticker" required>
+                <button type="submit">Submit</button>
+            </div>
+        </form>
+
+        <!-- Display Error Message -->
+        {% if error %}
+        <div class="error">
+            <p>{{ error }}</p>
+        </div>
+        {% endif %}
+
+        <!-- Stock Data Section -->
+        {% if ticker %}
+        <div class="stock-data">
+            <h2>Data for {{ ticker }}</h2>
+            <table>
+                <tr><th>Current Price</th><td>${{ price }}</td></tr>
+                <tr><th>Market Cap</th><td>${{ market_cap }}</td></tr>
+                <tr><th>52-Week High</th><td>${{ week_high }}</td></tr>
+                <tr><th>52-Week Low</th><td>${{ week_low }}</td></tr>           
+                <tr><th>SMA (14)</th><td>${{ sma }}</td></tr>
+                <tr><th>EMA (14)</th><td>${{ ema }}</td></tr>
+                <tr><th>RSI (14)</th><td>{{ rsi }}</td></tr>
+                <tr><th>MACD</th><td>{{ macd }}</td></tr>
+                <tr><th>MACD Signal</th><td>{{ macd_signal }}</td></tr>
+                <tr><th>Predicted Price</th><td>${{ predicted_price }}</td></tr>
+            </table>
+        </div>
+
+        <!-- Historical Data Section -->
+        <div class="stock-history">
+            <h3>Historical Data (Last 5 days)</h3>
+            <div>{{ history | safe }}</div>
+        </div>
+
+        <!-- Stock News Section -->
+        <div class="stock-news">
+            <h3>News for {{ ticker }}</h3>
+            <div>
+                {% if news %}
+                <div>{{ news | safe }}</div>
+                {% else %}
+                <p>No news available</p>
+                {% endif %}
+            </div>
+        </div>
+        {% endif %}
+    </div>
+</body>
+</html>
